@@ -22,7 +22,9 @@ function runPython(scriptName, args = [], onData = null) {
 
         console.log(`Executing: ${pythonCmd} ${scriptPath} ${args.join(' ')}`);
 
-        const pyProcess = spawn(pythonCmd, [scriptPath, ...args]);
+        const pyProcess = spawn(pythonCmd, [scriptPath, ...args], {
+            env: { ...process.env, PYTHONIOENCODING: 'utf-8' }
+        });
 
         let output = '';
         let errorOutput = '';
