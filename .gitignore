@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+.venv/
+
+# Build outputs
+client/dist/
+client/build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Uploaded & Generated files
+server/uploads/
+server/outputs/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Misc
+*.bak
+*.tmp
