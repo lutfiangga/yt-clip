@@ -178,6 +178,15 @@ export default function ClipList({ clips, jobId, videoUrl }) {
                         <span className="text-gray-500 text-xs">
                             {Math.round(clip.end - clip.start)}s
                         </span>
+                        {clip.score !== undefined && (
+                            <span className={`text-xs px-1.5 py-0.5 rounded border ${
+                                clip.score >= 80 ? 'bg-green-900/30 text-green-400 border-green-900' :
+                                clip.score >= 60 ? 'bg-yellow-900/30 text-yellow-400 border-yellow-900' :
+                                'bg-red-900/30 text-red-400 border-red-900'
+                            }`}>
+                                Score: {clip.score}
+                            </span>
+                        )}
                     </div>
                     <p className="text-gray-200 text-sm italic font-medium leading-relaxed line-clamp-2">"{clip.text}"</p>
                 </div>

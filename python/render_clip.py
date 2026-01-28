@@ -4,7 +4,7 @@ import subprocess
 import cv2
 import os
 
-def render_clip(video_path, start, end, ratio, output_path):
+def render_clip(video_path, start, end, ratio, output_path, ffmpeg_path=None):
     """
     Render a clip with smart cropping using FFmpeg.
     Uses face detection to find the center point for cropping.
@@ -22,7 +22,10 @@ def render_clip(video_path, start, end, ratio, output_path):
         target_width = width
     
     # Face detection to find average center
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    # Use explicit path if provided (sometimes cv2 fails to find data in some envs, but usually ok)
+    # If standard path fails, use absolute path if known or bundled
+    cascade_path = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+    face_cascade = cv2.CascadeClassifier(cascade_path)
     
     start_frame = int(start * fps)
     end_frame = int(end * fps)
@@ -68,8 +71,9 @@ def render_clip(video_path, start, end, ratio, output_path):
     duration = end - start
     
     # Build FFmpeg command
+    ffmpeg_cmd = ffmpeg_path if ffmpeg_path else 'ffmpeg'
     cmd = [
-        'ffmpeg', '-y',
+        ffmpeg_cmd, '-y',
         '-ss', str(start),
         '-i', video_path,
         '-t', str(duration),
@@ -94,7 +98,7 @@ def render_clip(video_path, start, end, ratio, output_path):
 if __name__ == "__main__":
     try:
         if len(sys.argv) < 6:
-            raise Exception("Usage: render_clip.py path start end ratio output")
+            raise Exception("Usage: render_clip.py path start end ratio output [ffmpeg_path]")
             
         video_path = sys.argv[1]
         start = float(sys.argv[2])
@@ -102,7 +106,11 @@ if __name__ == "__main__":
         ratio = float(sys.argv[4])
         output_path = sys.argv[5]
         
-        render_clip(video_path, start, end, ratio, output_path)
+        ffmpeg_path = None
+        if len(sys.argv) > 6:
+            ffmpeg_path = sys.argv[6]
+        
+        render_clip(video_path, start, end, ratio, output_path, ffmpeg_path)
         print(json.dumps({"success": True, "file": output_path}))
         
     except Exception as e:

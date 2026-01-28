@@ -48,7 +48,7 @@ export default function Dashboard({ jobId }) {
                 <ClipList 
                     clips={job.data.clips} 
                     jobId={jobId} 
-                    videoUrl={job.data.filename ? `http://localhost:3000/uploads/${job.data.filename}` : null}
+                    videoUrl={job.data.filename ? `http://${window.location.hostname}:3000/uploads/${job.data.filename}` : null}
                 />
             )}
         </div>

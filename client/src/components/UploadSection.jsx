@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Upload, Link, Loader2 } from 'lucide-react';
+import { Upload, Link, Loader2, Film, Cookie } from 'lucide-react';
 import { Button } from './ui/Button';
 import { api } from '../services/api';
 
@@ -7,6 +7,8 @@ export default function UploadSection({ onJobCreated }) {
   const [activeTab, setActiveTab] = useState('upload'); // 'upload' | 'url'
   const [file, setFile] = useState(null);
   const [url, setUrl] = useState('');
+
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -106,22 +108,21 @@ export default function UploadSection({ onJobCreated }) {
               <p className="text-gray-300 font-medium">
                 {file ? file.name : (isDragging ? "Drop your video here!" : "Click to browse or drag file")}
               </p>
-              <p className="text-gray-500 text-sm">MP4, MOV up to 500MB</p>
+              <p className="text-gray-500 text-sm">MP4, MOV, WebM up to 500MB</p>
             </label>
           </div>
         ) : (
-          <div className="flex flex-col gap-3">
-            <div className="p-3 bg-yellow-900/40 border border-yellow-700/50 rounded-lg text-yellow-200 text-xs">
-              ⚠️ <strong>Note:</strong> YouTube has strict bot protections. If this fails, please download the video manually and use the <strong>Upload Video</strong> tab.
-            </div>
-            <label className="text-sm text-gray-400">Paste Video URL</label>
-            <input
-              type="text"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://youtube.com/watch?v=..."
-              className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
-            />
+          <div className="flex flex-col gap-4">
+             <div>
+               <label className="text-sm text-gray-400 mb-1 block">Video URL</label>
+               <input
+                type="text"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="https://youtube.com/watch?v=..."
+                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+             </div>
           </div>
         )}
       </div>
@@ -135,9 +136,15 @@ export default function UploadSection({ onJobCreated }) {
       <Button
         className="w-full mt-6 py-3 text-lg"
         onClick={handleSubmit}
-        disabled={loading || (!file && !url)}
+        disabled={loading || (activeTab === 'upload' ? !file : !url)}
       >
-        {loading ? <div className="flex items-center justify-center gap-2"><Loader2 className="animate-spin" /> Processing...</div> : "Start Magic"}
+        {loading ? (
+          <div className="flex items-center justify-center gap-2">
+            <Loader2 className="animate-spin" /> Processing...
+          </div>
+        ) : (
+          "Start Magic ✨"
+        )}
       </Button>
     </div>
   );
